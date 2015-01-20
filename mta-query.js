@@ -31,7 +31,7 @@ var query = function (options, callback) {
         response.online = parseInt(information.online)
         response.players = information.players
 
-        return callback.apply(options, [ false, response ])
+        return callback.apply(options, [ null, response ])
 
     })
 }
@@ -138,7 +138,7 @@ var request = function(options, callback) {
                 }
             }
 
-            return callback.apply(options, [ false, object ])
+            return callback.apply(options, [ null, object ])
         }
     })
 }
