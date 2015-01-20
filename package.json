@@ -18,5 +18,12 @@
     "url": "https://github.com/JJJ4n/node-mta-query/issues"
   },
   "homepage": "https://github.com/JJJ4n/node-mta-query",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^2.1.0",
+    "should": "^4.6.1"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec test.js"
+  }
 }
