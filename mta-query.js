@@ -7,11 +7,11 @@ var query = function (options, callback) {
     if(typeof options === 'string') options.host = options
     options.port = options.port + 123 || 22126
     options.timeout = options.timeout || 1000
-    
-    if(!options.host) 
+
+    if(!options.host)
         return callback.apply(options, [ 'Invalid host' ])
 
-    if(!isFinite(options.port) || options.port < 1 || options.port > 65535) 
+    if(!isFinite(options.port) || options.port < 1 || options.port > 65535)
         return callback.apply(options, [ 'Invalid port' ])
 
     var response = {}
@@ -92,48 +92,50 @@ var request = function(options, callback) {
             object.maxplayers = array[8]
             object.players = []
 
-            while(message.length != 0) {
+            if (object.online > 0) {
+                while(message.length != 0) {
 
-                if(decode(message.slice(0, 2)) == String.fromCharCode(1) + '?') message = message.slice(2)
+                    if(decode(message.slice(0, 2)) == String.fromCharCode(1) + '?') message = message.slice(2)
 
-                var player = {}
+                    var player = {}
 
-                offset = message.readUInt8(0)
-                    
-                if(offset && 1) {
                     offset = message.readUInt8(0)
-                    player.name = decode(message.slice(1, offset))
-                    message = message.slice(offset)
-                }
-                if(offset && 2) {
-                    offset = message.readUInt8(0)
-                    player.team = decode(message.slice(1, offset))
-                    message = message.slice(offset)
-                }
-                if(offset && 4) {
-                    offset = message.readUInt8(0)
-                    player.skin = decode(message.slice(1, offset))
-                    message = message.slice(offset)
-                }
-                if(offset && 8) {
-                    offset = message.readUInt8(0)
-                    player.score = parseInt(decode(message.slice(1, offset))) || 0
-                    message = message.slice(offset)
-                }
-                if(offset && 16) {
-                    offset = message.readUInt8(0)
-                    player.ping = parseInt(decode(message.slice(1, offset))) || 0
-                    message = message.slice(offset)
-                }
-                if(offset && 32) {
-                    offset = message.readUInt8(0)
-                    player.time = parseInt(decode(message.slice(1, offset))) || 0
-                    message = message.slice(offset)
-                }
-                
-                message = message.slice(offset)
 
-                object.players.push(player)
+                    if(offset && 1) {
+                        offset = message.readUInt8(0)
+                        player.name = decode(message.slice(1, offset))
+                        message = message.slice(offset)
+                    }
+                    if(offset && 2) {
+                        offset = message.readUInt8(0)
+                        player.team = decode(message.slice(1, offset))
+                        message = message.slice(offset)
+                    }
+                    if(offset && 4) {
+                        offset = message.readUInt8(0)
+                        player.skin = decode(message.slice(1, offset))
+                        message = message.slice(offset)
+                    }
+                    if(offset && 8) {
+                        offset = message.readUInt8(0)
+                        player.score = parseInt(decode(message.slice(1, offset))) || 0
+                        message = message.slice(offset)
+                    }
+                    if(offset && 16) {
+                        offset = message.readUInt8(0)
+                        player.ping = parseInt(decode(message.slice(1, offset))) || 0
+                        message = message.slice(offset)
+                    }
+                    if(offset && 32) {
+                        offset = message.readUInt8(0)
+                        player.time = parseInt(decode(message.slice(1, offset))) || 0
+                        message = message.slice(offset)
+                    }
+
+                    message = message.slice(offset)
+
+                    object.players.push(player)
+                }
             }
 
             return callback.apply(options, [ false, object ])
